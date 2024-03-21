@@ -42,4 +42,19 @@ public class Policy {
     }
 
 
+    //Metodo para agregar una poliza
+    public void add(String startDate, String endDate, int idCoverage, int idCompany, int idLineInsurance){
+
+    }
+
+    //Metodo para modificar una poliza
+    public void modify(String columna, String valnuevo, String where){
+
+    }
+
+    //Metodo para eliminar una poliza
+    public void delete(int idPolicy){
+
+    }
+
 }

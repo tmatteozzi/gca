@@ -80,12 +80,13 @@ public class Insured extends User {
 
 
 //Metodo para agregar un cliente
-    public void add(int idInsured, String name, String lastName, String address, String phone, String nationality){
+    public void add(String name, String lastName, String address){
+
 
     }
 
 //Metodo para modificar un cliente
-    public void modify(int idInsured, String name, String lastName, String address, String phone, String nationality){
+    public void modify(String columna, String valnuevo, String where){
 
     }
 
