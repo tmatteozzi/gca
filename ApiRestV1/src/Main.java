@@ -52,7 +52,7 @@ public class Main {
                 // Metodos genericos
 
                 "24 - Recordar que sucede hoy\n" +
-                "25 - Cargar Polizas\n" );
+                "25 - Cargar Polizas\n " );
 
         seleccionMenu = scanner.nextInt();
 
@@ -69,7 +69,7 @@ public class Main {
                 contrasena =  scanner.next();
 
                 if (User.login(usuario, contrasena)){
-                    System.out.println("ingreso exitoso");
+                    System.out.println("Ingreso exitoso");
                 } else {
                     System.out.println("Ingreso no exitoso");
                 }
