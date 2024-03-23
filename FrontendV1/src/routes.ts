@@ -1,5 +1,11 @@
-import { cleanElement, createHeadingTitle, createListItem } from './utils';
-import { getAllInsureds, getInsured } from './Insureds';
+import type { Insured } from './types/Insured';
+import {
+    cleanElement,
+    createFormItem,
+    createHeadingTitle,
+    createListItem
+} from './utils';
+import { getAllInsureds, getInsured, addInsured } from './Insureds';
 import { getAllPoliciesByUser, getPolicyById } from './Policies';
 
 export async function showHomePage() {
@@ -8,10 +14,24 @@ export async function showHomePage() {
         const appDiv = document.getElementById('app');
         if (appDiv) cleanElement(appDiv);
 
+        // CONTAINER DIV
+        const containerDiv = document.createElement('div');
+        if (appDiv) appDiv.appendChild(containerDiv);
+
         // HEADING
-        createHeadingTitle('Asegurados de {nombreUsuario}', appDiv);
+        createHeadingTitle('Asegurados de {nombreUsuario}', containerDiv);
+
+        // BOTÓN AGREGAR ASEGURADO
+        const addInsuredButton = document.createElement('button');
+        addInsuredButton.textContent = 'Agregar asegurado';
+        addInsuredButton.addEventListener('click', () => {
+            navigateToAddInsuredPage();
+        });
+        containerDiv.appendChild(addInsuredButton);
+
         // INSURED SEARCH INPUT
         const searchInput = document.createElement('input');
+        containerDiv.appendChild(searchInput);
         searchInput.placeholder = 'Buscar...';
         searchInput.addEventListener('input', () => {
             const searchText = searchInput.value.toLowerCase();
@@ -20,13 +40,12 @@ export async function showHomePage() {
                     searchText
                 )
             );
-            renderInsureds(filteredInsureds, containerDiv, searchInput);
+            renderInsureds(filteredInsureds, userInsuredsDiv, searchInput);
         });
-        appDiv && appDiv.appendChild(searchInput);
 
-        // INSUREDLIST DIV
-        const containerDiv = document.createElement('div');
-        if (appDiv) appDiv.appendChild(containerDiv);
+        // INSUREDS DIV
+        const userInsuredsDiv = document.createElement('div');
+        containerDiv.appendChild(userInsuredsDiv);
     } catch (error) {
         console.error('Error al cargar los clientes:', error);
     }
@@ -34,28 +53,93 @@ export async function showHomePage() {
 
 function renderInsureds(insureds, containerDiv, searchInput) {
     cleanElement(containerDiv);
-    // SHOW CLIENTS WHEN USER PROMPTS
+    // RENDER INSUREDS AFTER SEARCH
     if (searchInput.value.trim() !== '') {
         insureds.forEach((insured) => {
-            // INSURED DIV
+            // INSURED CONTAINER
             const clientDiv = document.createElement('div');
-            // CLIENT NAME
+            clientDiv.classList.add('insuredItem'); // Aplicar clase de estilo
+
+            // INSURED NAME
             const nameText = document.createTextNode(
                 `${insured.name} ${insured.lastName}`
             );
-            // BUTTON FOR EACH CLIENT
+
+            // DETAILS BUTTON FOR EACH INSURED
             const detailButton = document.createElement('button');
             detailButton.textContent = 'Detalles';
+
             // EVENT HANDLER
             detailButton.addEventListener('click', () => {
                 navigateToInsuredDetailPage(insured.id);
             });
-            // APPENDS
+
             clientDiv.appendChild(nameText);
             clientDiv.appendChild(detailButton);
             containerDiv.appendChild(clientDiv);
         });
     }
+}
+
+export async function showAddInsured() {
+    const appDiv = document.getElementById('app');
+    if (appDiv) cleanElement(appDiv);
+
+    const containerDiv = document.createElement('div');
+    if (appDiv) appDiv.appendChild(containerDiv);
+
+    // HEADING
+    createHeadingTitle('Agregar nuevo asegurado', containerDiv);
+
+    // CREATE FORM
+    const addInsuredForm = document.createElement('form');
+    addInsuredForm.id = 'addInsuredForm';
+
+    // CREATE FORM ITEMS
+    createFormItem('Nombre', addInsuredForm, 'text', 'name');
+    createFormItem('Apellido', addInsuredForm, 'text', 'lastName');
+    createFormItem('Fecha de nacimiento', addInsuredForm, 'date', 'birthDay');
+    createFormItem('Dirección', addInsuredForm, 'text', 'address');
+    createFormItem('Teléfono', addInsuredForm, 'text', 'phone');
+    createFormItem('País', addInsuredForm, 'text', 'country');
+
+    // BUTTON
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Crear';
+    addInsuredForm.appendChild(submitButton);
+
+    // EVENT HANDLER
+    addInsuredForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // PREVENT RELOAD
+
+        // GET FORM DATA AND TURN IT INTO INSURED TYPE
+        const formData = new FormData(addInsuredForm);
+        const newInsured: Insured = {
+            name: formData.get('name') as string,
+            lastName: formData.get('lastName') as string,
+            birthDay: new Date(formData.get('birthDay') as string),
+            address: formData.get('address') as string,
+            phone: formData.get('phone') as string,
+            country: formData.get('country') as string,
+            userId: 0 // ACA TIENE QUE VENIR EL VALOR DEL ID QUE VOY A TENER AL INICIAR SESION
+        };
+
+        try {
+            // ADD INSURED
+            await addInsured(newInsured);
+            alert('Asegurado agregado exitosamente.');
+            // REDIRECT
+            window.location.href = '/'; // Por ejemplo, redirige a la página principal
+        } catch (error) {
+            console.error('Error al agregar el asegurado:', error);
+            alert(
+                'Se produjo un error al agregar el asegurado. Por favor, inténtalo de nuevo.'
+            );
+        }
+    });
+    // ADD FORM TO MAIN DIV
+    containerDiv.appendChild(addInsuredForm);
 }
 
 export async function showInsuredDetails(id) {
@@ -155,6 +239,12 @@ function navigateToInsuredDetailPage(id) {
     showInsuredDetails(id);
 }
 
+function navigateToAddInsuredPage() {
+    const addInsuredPageUrl = '/client/add';
+    history.pushState({ page: 'addInsured' }, '', addInsuredPageUrl);
+    showAddInsured();
+}
+
 function navigateToPolicyDetailPage(insuredId, policyId) {
     const detailPageUrl = `/client/${insuredId}/policy/${policyId}`;
 
@@ -174,6 +264,8 @@ window.onpopstate = function (event) {
             showInsuredDetails(state.clientId);
         } else if (state.page === 'policyDetail') {
             showPolicyDetails(state.policyId);
+        } else if (state.page === 'addInsured') {
+            showAddInsured();
         } else {
             // IF NOT CLIENT OR POLICY PAGE, THEN HOME PAGE
             showHomePage();

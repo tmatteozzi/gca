@@ -12,6 +12,7 @@ export async function getInsured(id): Promise<Insured> {
 // CREAR NUEVO CLIENTE
 export async function addInsured(insured: Insured) {
     // METODO POST PARA AGREGAR
+    console.log(insured);
 }
 
 // EDITAR CLIENTE
