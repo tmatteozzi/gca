@@ -3,7 +3,9 @@ import {
     cleanElement,
     createFormItem,
     createHeadingTitle,
-    createListItem
+    createListItem,
+    createPageContainer,
+    renderInsureds
 } from './utils';
 import {
     getAllInsureds,
@@ -15,18 +17,14 @@ import { getAllPoliciesByUser, getPolicyById } from './Policies';
 
 export async function showHomePage() {
     try {
+        // REQUEST
         const insureds = await getAllInsureds();
-        const appDiv = document.getElementById('app');
-        if (appDiv) cleanElement(appDiv);
 
-        // CONTAINER DIV
-        const containerDiv = document.createElement('div');
-        if (appDiv) appDiv.appendChild(containerDiv);
-
+        const containerDiv = createPageContainer();
         // HEADING
         createHeadingTitle('Asegurados de {nombreUsuario}', containerDiv);
 
-        // BOTÓN AGREGAR ASEGURADO
+        // ADD INSURED BUTTON
         const addInsuredButton = document.createElement('button');
         addInsuredButton.textContent = 'Agregar Asegurado';
         addInsuredButton.addEventListener('click', () => {
@@ -56,42 +54,8 @@ export async function showHomePage() {
     }
 }
 
-function renderInsureds(insureds, containerDiv, searchInput) {
-    cleanElement(containerDiv);
-    // RENDER INSUREDS AFTER SEARCH
-    if (searchInput.value.trim() !== '') {
-        insureds.forEach((insured) => {
-            // INSURED CONTAINER
-            const clientDiv = document.createElement('div');
-            clientDiv.classList.add('insuredItem'); // Aplicar clase de estilo
-
-            // INSURED NAME
-            const nameText = document.createTextNode(
-                `${insured.name} ${insured.lastName}`
-            );
-
-            // DETAILS BUTTON FOR EACH INSURED
-            const detailButton = document.createElement('button');
-            detailButton.textContent = 'Detalles';
-
-            // EVENT HANDLER
-            detailButton.addEventListener('click', () => {
-                navigateToInsuredDetailPage(insured.id);
-            });
-
-            clientDiv.appendChild(nameText);
-            clientDiv.appendChild(detailButton);
-            containerDiv.appendChild(clientDiv);
-        });
-    }
-}
-
 async function showAddInsured() {
-    const appDiv = document.getElementById('app');
-    if (appDiv) cleanElement(appDiv);
-
-    const containerDiv = document.createElement('div');
-    if (appDiv) appDiv.appendChild(containerDiv);
+    const containerDiv = createPageContainer();
 
     // HEADING
     createHeadingTitle('Agregar nuevo asegurado', containerDiv);
@@ -149,17 +113,17 @@ async function showAddInsured() {
 
 async function showInsuredDetails(id) {
     try {
+        // REQUESTS
         const insured = await getInsured(id);
         const policies = await getAllPoliciesByUser(insured.id);
-        const appDiv = document.getElementById('app');
-        if (appDiv) cleanElement(appDiv);
-        // INSURED CONTAINER DIV
-        const containerDiv = document.createElement('div');
+
+        const containerDiv = createPageContainer();
         // INSURED DETAILS
         createHeadingTitle(
             `${insured.name + ' ' + insured.lastName}`,
             containerDiv
         );
+        // CLIENT DATA
         createListItem(`${insured.address}`, containerDiv);
         createListItem(
             `${insured.birthDay.toLocaleDateString()}`,
@@ -187,24 +151,18 @@ async function showInsuredDetails(id) {
             detailButton.addEventListener('click', () => {
                 navigateToPolicyDetailPage(insured.id, policy.id);
             });
-
             // APPENDS
             policyDiv.appendChild(nameText);
             policyDiv.appendChild(detailButton);
             containerDiv.appendChild(policyDiv);
         });
-        if (appDiv) appDiv.appendChild(containerDiv);
     } catch (error) {
         console.error('Error al cargar los detalles del cliente:', error);
     }
 }
 
 function showEditInsuredForm(insured) {
-    const appDiv = document.getElementById('app');
-    if (appDiv) cleanElement(appDiv);
-
-    const containerDiv = document.createElement('div');
-    if (appDiv) appDiv.appendChild(containerDiv);
+    const containerDiv = createPageContainer();
 
     // HEADING
     createHeadingTitle('Editar Asegurado', containerDiv);
@@ -280,28 +238,27 @@ function showEditInsuredForm(insured) {
 }
 
 async function showPolicyDetails(policyId) {
+    // REQUEST
     const policy = await getPolicyById(policyId);
-    const appDiv = document.getElementById('app');
-    if (appDiv) cleanElement(appDiv);
 
+    const containerDiv = createPageContainer();
     // MAIN HEADING
-    createHeadingTitle('Poliza', appDiv);
-    // MAIN DIV
-    const mainDiv = document.createElement('div');
-    // DIV PARA GUARDAR LA LISTA DE POLIZAS
-    const containerDiv = document.createElement('div');
+    createHeadingTitle('Poliza', containerDiv);
+    // INSUREDS DIV
+    const policyDataDiv = document.createElement('div');
+    containerDiv.appendChild(policyDataDiv);
     // POLICY DATA
     createListItem(
         `Start Date: ${policy.startDate.toLocaleDateString()}`,
-        containerDiv
+        policyDataDiv
     );
     createListItem(
         `End Date: ${policy.endDate.toLocaleDateString()}`,
-        containerDiv
+        policyDataDiv
     );
-    createListItem(`Product Name: ${policy.productName}`, containerDiv);
-    createListItem(`Branch Name: ${policy.branchName}`, containerDiv);
-    createListItem(`Company Name: ${policy.companyName}`, containerDiv);
+    createListItem(`Product Name: ${policy.productName}`, policyDataDiv);
+    createListItem(`Branch Name: ${policy.branchName}`, policyDataDiv);
+    createListItem(`Company Name: ${policy.companyName}`, policyDataDiv);
 
     // EDIT BUTTOn
     const editButton = document.createElement('button');
@@ -311,15 +268,10 @@ async function showPolicyDetails(policyId) {
         navigateToEditPolicyPage(policy.id);
     });
     containerDiv.appendChild(editButton);
-
-    // AGREGAR A EL DIV PRINCIPAL EL DIV DE POLIZAS
-    mainDiv.appendChild(containerDiv);
-
-    if (appDiv) appDiv.appendChild(mainDiv);
 }
 
 // NAVIGATION
-function navigateToInsuredDetailPage(id) {
+export function navigateToInsuredDetailPage(id) {
     const detailPageUrl = `/client/${id}`;
 
     // NAVIGATE TO CLIENT DETAIL PAGE
