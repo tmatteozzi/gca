@@ -5,7 +5,12 @@ import {
     createHeadingTitle,
     createListItem
 } from './utils';
-import { getAllInsureds, getInsured, addInsured } from './Insureds';
+import {
+    getAllInsureds,
+    getInsured,
+    addInsured,
+    editInsured
+} from './Insureds';
 import { getAllPoliciesByUser, getPolicyById } from './Policies';
 
 export async function showHomePage() {
@@ -23,7 +28,7 @@ export async function showHomePage() {
 
         // BOTÓN AGREGAR ASEGURADO
         const addInsuredButton = document.createElement('button');
-        addInsuredButton.textContent = 'Agregar asegurado';
+        addInsuredButton.textContent = 'Agregar Asegurado';
         addInsuredButton.addEventListener('click', () => {
             navigateToAddInsuredPage();
         });
@@ -81,7 +86,7 @@ function renderInsureds(insureds, containerDiv, searchInput) {
     }
 }
 
-export async function showAddInsured() {
+async function showAddInsured() {
     const appDiv = document.getElementById('app');
     if (appDiv) cleanElement(appDiv);
 
@@ -142,7 +147,7 @@ export async function showAddInsured() {
     containerDiv.appendChild(addInsuredForm);
 }
 
-export async function showInsuredDetails(id) {
+async function showInsuredDetails(id) {
     try {
         const insured = await getInsured(id);
         const policies = await getAllPoliciesByUser(insured.id);
@@ -162,6 +167,15 @@ export async function showInsuredDetails(id) {
         );
         createListItem(`${insured.phone}`, containerDiv);
         createListItem(`${insured.country}`, containerDiv);
+
+        // EDIT BUTTON
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.addEventListener('click', () => {
+            navigateToEditInsuredPage(insured.id);
+        });
+        containerDiv.appendChild(editButton);
+
         // INSURED POLICIES
         createHeadingTitle('Polizas', containerDiv);
         policies.forEach((policy) => {
@@ -185,7 +199,87 @@ export async function showInsuredDetails(id) {
     }
 }
 
-export async function showPolicyDetails(policyId) {
+function showEditInsuredForm(insured) {
+    const appDiv = document.getElementById('app');
+    if (appDiv) cleanElement(appDiv);
+
+    const containerDiv = document.createElement('div');
+    if (appDiv) appDiv.appendChild(containerDiv);
+
+    // HEADING
+    createHeadingTitle('Editar Asegurado', containerDiv);
+
+    // CREATE FORM
+    const editInsuredForm = document.createElement('form');
+    editInsuredForm.id = 'editInsuredForm';
+
+    // CREATE FORM ITEMS WITH CURRENT INSURED DATA
+    createFormItem('Nombre', editInsuredForm, 'text', 'name', insured.name);
+    createFormItem(
+        'Apellido',
+        editInsuredForm,
+        'text',
+        'lastName',
+        insured.lastName
+    );
+    createFormItem(
+        'Fecha de nacimiento',
+        editInsuredForm,
+        'date',
+        'birthDay',
+        insured.birthDay
+    );
+    createFormItem(
+        'Dirección',
+        editInsuredForm,
+        'text',
+        'address',
+        insured.address
+    );
+    createFormItem('Teléfono', editInsuredForm, 'text', 'phone', insured.phone);
+    createFormItem('País', editInsuredForm, 'text', 'country', insured.country);
+
+    // BUTTON
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Guardar';
+    editInsuredForm.appendChild(submitButton);
+
+    // EVENT HANDLER
+    editInsuredForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // PREVENT RELOAD
+
+        // GET FORM DATA AND TURN IT INTO INSURED TYPE
+        const formData = new FormData(editInsuredForm);
+        const editedInsured: Insured = {
+            name: formData.get('name') as string,
+            lastName: formData.get('lastName') as string,
+            birthDay: new Date(formData.get('birthDay') as string),
+            address: formData.get('address') as string,
+            phone: formData.get('phone') as string,
+            country: formData.get('country') as string,
+            userId: insured.userId
+        };
+
+        try {
+            // EDIT INSURED
+            await editInsured(editedInsured);
+            alert('Asegurado editado exitosamente.');
+            // REDIRECT
+            navigateToInsuredDetailPage(insured.id);
+        } catch (error) {
+            console.error('Error al editar el asegurado:', error);
+            alert(
+                'Se produjo un error al editar el asegurado. Por favor, inténtalo de nuevo.'
+            );
+        }
+    });
+
+    // ADD FORM TO MAIN DIV
+    containerDiv.appendChild(editInsuredForm);
+}
+
+async function showPolicyDetails(policyId) {
     const policy = await getPolicyById(policyId);
     const appDiv = document.getElementById('app');
     if (appDiv) cleanElement(appDiv);
@@ -245,6 +339,20 @@ function navigateToAddInsuredPage() {
     showAddInsured();
 }
 
+function navigateToEditInsuredPage(id) {
+    const editInsuredPageUrl = `/client/${id}/edit`;
+    history.pushState(
+        { page: 'editInsured', insuredId: id },
+        '',
+        editInsuredPageUrl
+    );
+    getInsured(id)
+        .then((insured) => showEditInsuredForm(insured))
+        .catch((error) =>
+            console.error('Error al obtener el asegurado:', error)
+        );
+}
+
 function navigateToPolicyDetailPage(insuredId, policyId) {
     const detailPageUrl = `/client/${insuredId}/policy/${policyId}`;
 
@@ -266,6 +374,8 @@ window.onpopstate = function (event) {
             showPolicyDetails(state.policyId);
         } else if (state.page === 'addInsured') {
             showAddInsured();
+        } else if (state.page === 'editInsured') {
+            showEditInsuredForm(state.insuredId);
         } else {
             // IF NOT CLIENT OR POLICY PAGE, THEN HOME PAGE
             showHomePage();

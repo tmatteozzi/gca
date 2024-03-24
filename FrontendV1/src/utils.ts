@@ -21,12 +21,19 @@ export function createListItem(h1Content, parentDiv) {
     parentDiv.appendChild(div);
 }
 
-export function createFormItem(labelText, formElement, inputType, inputName) {
+export function createFormItem(
+    labelText,
+    formElement,
+    inputType,
+    inputName,
+    optionalValue?
+) {
     const label = document.createElement('label');
     label.textContent = labelText;
     formElement.appendChild(label);
     const nameInput = document.createElement('input');
     nameInput.type = inputType;
     nameInput.name = inputName;
+    nameInput.value = optionalValue || null;
     formElement.appendChild(nameInput);
 }

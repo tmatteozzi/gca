@@ -1,5 +1,6 @@
 import { Insured } from './types/Insured';
 
+// ESTE METODO VA A TENER QUE RECIBIR EL ID DEL USUARIO QUE SE LOGEO
 export async function getAllInsureds(): Promise<Insured[]> {
     // METODO GET DE TODOS
     return insuredTestData;
@@ -18,6 +19,7 @@ export async function addInsured(insured: Insured) {
 // EDITAR CLIENTE
 export async function editInsured(insured: Insured) {
     // METODO PARA EDITAR
+    console.log(insured);
 }
 
 // ELIMINAR CLIENTE
