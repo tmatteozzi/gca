@@ -13,7 +13,7 @@ import {
     addInsured,
     editInsured
 } from './Insureds';
-import { getAllPoliciesByUser, getPolicyById } from './Policies';
+import { getAllPoliciesByUser, getPolicyById, editPolicy } from './Policies';
 
 export async function showHomePage() {
     try {
@@ -298,7 +298,7 @@ async function showEditPolicyForm(insuredId, policy) {
         );
 
         // PRODUCT DROPDOWN
-        const products = ['Product A', 'Product B', 'Product C']; // Example product options
+        const products = ['Product A', 'Product B', 'Product C']; // HARDCODEADO
         createDropdown(
             'Product',
             editPolicyForm,
@@ -308,7 +308,7 @@ async function showEditPolicyForm(insuredId, policy) {
         );
 
         // BRANCH DROPDOWN
-        const branches = ['Branch A', 'Branch B', 'Branch C']; // Example branch options
+        const branches = ['Branch A', 'Branch B', 'Branch C']; // HARDCODEADO
         createDropdown(
             'Branch',
             editPolicyForm,
@@ -318,7 +318,7 @@ async function showEditPolicyForm(insuredId, policy) {
         );
 
         // COMPANY DROPDOWN
-        const companies = ['Company A', 'Company B', 'Company C']; // Example company options
+        const companies = ['Company A', 'Company B', 'Company C']; // HARDCODEADO
         createDropdown(
             'Company',
             editPolicyForm,
@@ -349,8 +349,7 @@ async function showEditPolicyForm(insuredId, policy) {
 
             try {
                 // EDIT POLICY
-                // Aquí debes llamar a la función para editar la póliza
-                // await editPolicy(editedPolicy);
+                await editPolicy(editedPolicy);
                 alert('Póliza editada exitosamente.');
                 // REDIRECT
                 navigateToPolicyDetailPage(insuredId, policy.id);

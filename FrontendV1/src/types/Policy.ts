@@ -1,5 +1,5 @@
 export interface Policy {
-    id: number;
+    id?: number;
     startDate: Date;
     endDate: Date;
     productName: string;
