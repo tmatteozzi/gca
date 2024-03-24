@@ -1,9 +1,9 @@
 import type { Insured } from './types/Insured';
 import {
-    cleanElement,
     createFormItem,
     createHeadingTitle,
     createListItem,
+    createDropdown,
     createPageContainer,
     renderInsureds
 } from './utils';
@@ -237,7 +237,7 @@ function showEditInsuredForm(insured) {
     containerDiv.appendChild(editInsuredForm);
 }
 
-async function showPolicyDetails(policyId) {
+async function showPolicyDetails(insuredId, policyId) {
     // REQUEST
     const policy = await getPolicyById(policyId);
 
@@ -265,9 +265,111 @@ async function showPolicyDetails(policyId) {
     editButton.textContent = 'Editar';
     editButton.classList.add('editButton');
     editButton.addEventListener('click', () => {
-        navigateToEditPolicyPage(policy.id);
+        navigateToEditPolicyPage(insuredId, policy.id);
     });
     containerDiv.appendChild(editButton);
+}
+
+async function showEditPolicyForm(insuredId, policy) {
+    try {
+        const containerDiv = createPageContainer();
+
+        // HEADING
+        createHeadingTitle('Editar Póliza', containerDiv);
+
+        // CREATE FORM
+        const editPolicyForm = document.createElement('form');
+        editPolicyForm.id = 'editPolicyForm';
+
+        // CREATE FORM ITEMS WITH CURRENT POLICY DATA
+        createFormItem(
+            'Start Date',
+            editPolicyForm,
+            'date',
+            'startDate',
+            policy.startDate.toLocaleDateString()
+        );
+        createFormItem(
+            'End Date',
+            editPolicyForm,
+            'date',
+            'endDate',
+            policy.endDate.toLocaleDateString()
+        );
+
+        // PRODUCT DROPDOWN
+        const products = ['Product A', 'Product B', 'Product C']; // Example product options
+        createDropdown(
+            'Product',
+            editPolicyForm,
+            'product',
+            products,
+            policy.productName
+        );
+
+        // BRANCH DROPDOWN
+        const branches = ['Branch A', 'Branch B', 'Branch C']; // Example branch options
+        createDropdown(
+            'Branch',
+            editPolicyForm,
+            'branch',
+            branches,
+            policy.branchName
+        );
+
+        // COMPANY DROPDOWN
+        const companies = ['Company A', 'Company B', 'Company C']; // Example company options
+        createDropdown(
+            'Company',
+            editPolicyForm,
+            'company',
+            companies,
+            policy.companyName
+        );
+
+        // BUTTON
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Guardar';
+        editPolicyForm.appendChild(submitButton);
+
+        // EVENT HANDLER
+        editPolicyForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // PREVENT RELOAD
+
+            // GET FORM DATA AND TURN IT INTO POLICY TYPE
+            const formData = new FormData(editPolicyForm);
+            const editedPolicy = {
+                startDate: new Date(formData.get('startDate') as string),
+                endDate: new Date(formData.get('endDate') as string),
+                productName: formData.get('product') as string,
+                branchName: formData.get('branch') as string,
+                companyName: formData.get('company') as string
+            };
+
+            try {
+                // EDIT POLICY
+                // Aquí debes llamar a la función para editar la póliza
+                // await editPolicy(editedPolicy);
+                alert('Póliza editada exitosamente.');
+                // REDIRECT
+                navigateToPolicyDetailPage(insuredId, policy.id);
+            } catch (error) {
+                console.error('Error al editar la póliza:', error);
+                alert(
+                    'Se produjo un error al editar la póliza. Por favor, inténtalo de nuevo.'
+                );
+            }
+        });
+
+        // ADD FORM TO MAIN DIV
+        containerDiv.appendChild(editPolicyForm);
+    } catch (error) {
+        console.error(
+            'Error al cargar el formulario de edición de la póliza:',
+            error
+        );
+    }
 }
 
 // NAVIGATION
@@ -303,7 +405,19 @@ function navigateToEditInsuredPage(id) {
         );
 }
 
-function navigateToEditPolicyPage(id) {}
+function navigateToEditPolicyPage(insuredId, policyId) {
+    const editPolicyPageUrl = `/policy/${policyId}/edit`;
+    history.pushState(
+        { page: 'editPolicy', policyId: policyId },
+        '',
+        editPolicyPageUrl
+    );
+    getPolicyById(policyId)
+        .then((policy) => showEditPolicyForm(insuredId, policy))
+        .catch((error) =>
+            console.error('Error al obtener el asegurado:', error)
+        );
+}
 
 function navigateToPolicyDetailPage(insuredId, policyId) {
     const detailPageUrl = `/client/${insuredId}/policy/${policyId}`;
@@ -314,7 +428,7 @@ function navigateToPolicyDetailPage(insuredId, policyId) {
         '',
         detailPageUrl
     );
-    showPolicyDetails(policyId);
+    showPolicyDetails(insuredId, policyId);
 }
 
 window.onpopstate = function (event) {
@@ -323,11 +437,13 @@ window.onpopstate = function (event) {
         if (state.page === 'clientDetail') {
             showInsuredDetails(state.clientId);
         } else if (state.page === 'policyDetail') {
-            showPolicyDetails(state.policyId);
+            showPolicyDetails(state.insuredId, state.policyId);
         } else if (state.page === 'addInsured') {
             showAddInsured();
         } else if (state.page === 'editInsured') {
             showEditInsuredForm(state.insuredId);
+        } else if (state.page === 'editPolicy') {
+            showEditPolicyForm(state.insuredId, state.policy);
         } else {
             // IF NOT CLIENT OR POLICY PAGE, THEN HOME PAGE
             showHomePage();

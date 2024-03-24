@@ -82,3 +82,21 @@ export function renderInsureds(insureds, containerDiv, searchInput) {
         });
     }
 }
+
+export function createDropdown(labelText, form, name, options, selectedOption) {
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    form.appendChild(label);
+
+    const dropdown = document.createElement('select');
+    dropdown.name = name;
+    options.forEach((option) => {
+        const optionElement = document.createElement('option');
+        optionElement.textContent = option;
+        if (option === selectedOption) {
+            optionElement.selected = true;
+        }
+        dropdown.appendChild(optionElement);
+    });
+    form.appendChild(dropdown);
+}
