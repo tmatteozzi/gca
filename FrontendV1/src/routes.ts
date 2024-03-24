@@ -308,7 +308,7 @@ async function showPolicyDetails(policyId) {
     editButton.textContent = 'Editar';
     editButton.classList.add('editButton');
     editButton.addEventListener('click', () => {
-        showPolicyEditForm(policy);
+        navigateToEditPolicyPage(policy.id);
     });
     containerDiv.appendChild(editButton);
 
@@ -317,8 +317,6 @@ async function showPolicyDetails(policyId) {
 
     if (appDiv) appDiv.appendChild(mainDiv);
 }
-
-function showPolicyEditForm(policy) {}
 
 // NAVIGATION
 function navigateToInsuredDetailPage(id) {
@@ -352,6 +350,8 @@ function navigateToEditInsuredPage(id) {
             console.error('Error al obtener el asegurado:', error)
         );
 }
+
+function navigateToEditPolicyPage(id) {}
 
 function navigateToPolicyDetailPage(insuredId, policyId) {
     const detailPageUrl = `/client/${insuredId}/policy/${policyId}`;
