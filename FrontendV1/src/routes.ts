@@ -6,15 +6,16 @@ import {
     createDropdown,
     createPageContainer,
     renderInsureds,
-    renderPolicies
+    renderPolicies,
+    createHeaderContainer
 } from './utils';
 import {
     getAllInsureds,
     getInsured,
     addInsured,
     editInsured
-} from './Insureds';
-import { getAllPoliciesByUser, getPolicyById, editPolicy } from './Policies';
+} from './InsuredsService';
+import { getAllPoliciesByUser, getPolicyById, editPolicy } from './PoliciesService';
 import { userName } from './Login';
 
 export async function showHomePage() {
@@ -25,9 +26,7 @@ export async function showHomePage() {
         const containerDiv = createPageContainer();
 
         // NUEVO DIV PARA ASEGURADOS Y BOTÓN
-        const headerContainer = document.createElement('div');
-        headerContainer.classList.add('headerContainer');
-        containerDiv.appendChild(headerContainer);
+        const headerContainer = createHeaderContainer(containerDiv);
 
         // HEADING
         createHeadingTitle(`Asegurados de ${userName}`, headerContainer);
@@ -68,25 +67,24 @@ async function showAddInsured() {
     const containerDiv = createPageContainer();
 
     // HEADING
-    createHeadingTitle('Agregar nuevo asegurado', containerDiv);
+    const headerContainer = createHeaderContainer(containerDiv);
+    createHeadingTitle('Agregar nuevo asegurado', headerContainer);
 
-    // CREATE FORM
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Crear';
+    headerContainer.appendChild(submitButton);
+
+    // FORM
     const addInsuredForm = document.createElement('form');
     addInsuredForm.id = 'addInsuredForm';
 
-    // CREATE FORM ITEMS
     createFormItem('Nombre', addInsuredForm, 'text', 'name');
     createFormItem('Apellido', addInsuredForm, 'text', 'lastName');
     createFormItem('Fecha de nacimiento', addInsuredForm, 'date', 'birthDay');
     createFormItem('Dirección', addInsuredForm, 'text', 'address');
     createFormItem('Teléfono', addInsuredForm, 'text', 'phone');
     createFormItem('País', addInsuredForm, 'text', 'country');
-
-    // BUTTON
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Crear';
-    addInsuredForm.appendChild(submitButton);
 
     // EVENT HANDLER
     addInsuredForm.addEventListener('submit', async (event) => {
@@ -109,7 +107,7 @@ async function showAddInsured() {
             await addInsured(newInsured);
             alert('Asegurado agregado exitosamente.');
             // REDIRECT
-            window.location.href = '/'; // Por ejemplo, redirige a la página principal
+            window.location.href = '/';
         } catch (error) {
             console.error('Error al agregar el asegurado:', error);
             alert(
@@ -134,14 +132,13 @@ async function showInsuredDetails(id) {
         clientInfoDiv.classList.add('clientInfoDiv');
         containerDiv.appendChild(clientInfoDiv);
 
-        const headerContainer = document.createElement('div');
-        headerContainer.classList.add('headerContainer');
-        // INSURED DETAILS
+        // HEADER
+        const headerContainer = createHeaderContainer(clientInfoDiv);
         createHeadingTitle(
             `${insured.name + ' ' + insured.lastName}`,
             headerContainer
         );
-        // EDIT BUTTON
+
         const editButton = document.createElement('button');
         editButton.classList.add('editButton');
         editButton.textContent = 'Editar';
@@ -149,8 +146,6 @@ async function showInsuredDetails(id) {
             navigateToEditInsuredPage(insured.id);
         });
         headerContainer.appendChild(editButton);
-
-        clientInfoDiv.appendChild(headerContainer);
 
         // CLIENT DATA
         createListItem('Address:', `${insured.address}`, clientInfoDiv);
@@ -178,13 +173,18 @@ function showEditInsuredForm(insured) {
     const containerDiv = createPageContainer();
 
     // HEADING
-    createHeadingTitle('Editar Asegurado', containerDiv);
+    const headerContainer = createHeaderContainer(containerDiv);
+    createHeadingTitle('Editar Asegurado', headerContainer);
 
-    // CREATE FORM
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Guardar';
+    headerContainer.appendChild(submitButton);
+
+    // FORM
     const editInsuredForm = document.createElement('form');
     editInsuredForm.id = 'editInsuredForm';
 
-    // CREATE FORM ITEMS WITH CURRENT INSURED DATA
     createFormItem('Nombre', editInsuredForm, 'text', 'name', insured.name);
     createFormItem(
         'Apellido',
@@ -209,12 +209,6 @@ function showEditInsuredForm(insured) {
     );
     createFormItem('Teléfono', editInsuredForm, 'text', 'phone', insured.phone);
     createFormItem('País', editInsuredForm, 'text', 'country', insured.country);
-
-    // BUTTON
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Guardar';
-    editInsuredForm.appendChild(submitButton);
 
     // EVENT HANDLER
     editInsuredForm.addEventListener('submit', async (event) => {
@@ -245,7 +239,6 @@ function showEditInsuredForm(insured) {
             );
         }
     });
-
     // ADD FORM TO MAIN DIV
     containerDiv.appendChild(editInsuredForm);
 }
@@ -294,13 +287,18 @@ async function showEditPolicyForm(insuredId, policy) {
         const containerDiv = createPageContainer();
 
         // HEADING
-        createHeadingTitle('Editar Póliza', containerDiv);
+        const headerContainer = createHeaderContainer(containerDiv);
+        createHeadingTitle('Editar Póliza', headerContainer);
 
-        // CREATE FORM
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Guardar';
+        headerContainer.appendChild(submitButton);
+
+        // FORM
         const editPolicyForm = document.createElement('form');
         editPolicyForm.id = 'editPolicyForm';
 
-        // CREATE FORM ITEMS WITH CURRENT POLICY DATA
         createFormItem(
             'Start Date',
             editPolicyForm,
@@ -345,12 +343,6 @@ async function showEditPolicyForm(insuredId, policy) {
             companies,
             policy.companyName
         );
-
-        // BUTTON
-        const submitButton = document.createElement('button');
-        submitButton.type = 'submit';
-        submitButton.textContent = 'Guardar';
-        editPolicyForm.appendChild(submitButton);
 
         // EVENT HANDLER
         editPolicyForm.addEventListener('submit', async (event) => {

@@ -7,6 +7,13 @@ export function cleanElement(element) {
     element.innerHTML = '';
 }
 
+export function createHeaderContainer(parentDiv) {
+    const headerContainer = document.createElement('div');
+    headerContainer.classList.add('headerContainer');
+    parentDiv.appendChild(headerContainer);
+    return headerContainer;
+}
+
 export function createHeadingTitle(
     h1Content: string,
     parentDiv: HTMLDivElement
