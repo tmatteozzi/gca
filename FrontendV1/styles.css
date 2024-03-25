@@ -15,6 +15,12 @@ body {
     margin-top: 20px;
 }
 
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .listItem {
     display: flex;
     justify-content: space-between;
@@ -39,6 +45,12 @@ body {
     max-height: 20px;
 }
 
+.clientInfoDiv {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
 /* FORMS */
 form {
     margin-bottom: 20px;
@@ -57,9 +69,12 @@ input[type='date'] {
 
 select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
 }
 
 /* HEADINGS & TEXT */
@@ -83,12 +98,6 @@ select {
     font-weight: medium;
 }
 
-.headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .insuredsSearchInput {
     width: calc(100% - 20px);
     margin: 10px;
@@ -97,12 +106,6 @@ select {
     border-radius: 5px;
     outline: none;
     box-sizing: border-box;
-}
-
-.clientInfoDiv {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
 }
 
 /* BUTTONS */
