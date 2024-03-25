@@ -1,22 +1,24 @@
 body {
-    background-color: #f0f0f0; /* Fondo de la página gris claro */
+    background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
 }
 
+/* DIVS */
 .container {
-    background-color: #ffffff; /* Fondo de los contenedores blanco */
-    border-radius: 10px; /* Bordes redondeados para los contenedores */
-    padding: 20px; /* Espaciado interno para los contenedores */
-    margin-bottom: 20px; /* Margen inferior para separar los contenedores */
-    margin-left: auto; /* Centrar en pantalla */
-    margin-right: auto; /* Centrar en pantalla */
-    max-width: 800px; /* Ancho máximo del contenedor */
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
     margin-top: 20px;
 }
 
 .listItem {
-    display: flex; /* Utiliza flexbox */
-    justify-content: space-between; /* Distribuye los elementos justificadamente */
-    align-items: center; /* Centra los elementos verticalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #ffffff;
     border-radius: 10px;
     padding: 10px;
@@ -25,9 +27,9 @@ body {
 }
 
 .listItemWithButton {
-    display: flex; /* Utiliza flexbox */
-    justify-content: space-between; /* Distribuye los elementos justificadamente */
-    align-items: center; /* Centra los elementos verticalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
@@ -37,74 +39,77 @@ body {
     max-height: 20px;
 }
 
-/* Estilos para los formularios */
+/* FORMS */
 form {
-    margin-bottom: 20px; /* Margen inferior para separar los formularios */
+    margin-bottom: 20px;
 }
 
 input[type='text'],
 input[type='date'] {
-    width: 100%; /* Ancho completo para los inputs de texto y fecha */
-    padding: 8px; /* Espaciado interno para los inputs */
-    margin-bottom: 10px; /* Margen inferior para separar los inputs */
-    border-radius: 5px; /* Bordes redondeados para los inputs */
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
 }
 
 select {
-    width: 100%; /* Ancho completo para los select */
-    padding: 8px; /* Espaciado interno para los select */
-    margin-bottom: 10px; /* Margen inferior para separar los select */
-    border-radius: 5px; /* Bordes redondeados para los select */
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
+/* HEADINGS & TEXT */
 .mainH1 {
-    font-size: 1.5rem; /* Equivalente a 'text-2xl' */
-    font-weight: bold; /* Equivalente a 'font-bold' */
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .mainH2 {
-    font-size: 1.25rem; /* Equivalente a 'text-xl' */
-    font-weight: 600; /* Equivalente a 'font-bold' */
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .listH1 {
-    font-size: 1.125rem; /* Equivalente a 'text-lg' */
-    font-weight: medium; /* Equivalente a 'font-medium' */
+    font-size: 1.125rem;
+    font-weight: medium;
 }
 
 .listSpan {
-    font-size: 1.25rem; /* Equivalente a 'text-xl' */
+    font-size: 1.25rem;
     font-weight: medium;
 }
 
 .headerContainer {
-    display: flex; /* Utiliza flexbox */
-    justify-content: space-between; /* Distribuye los elementos justificadamente */
-    align-items: center; /* Centra los elementos verticalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .insuredsSearchInput {
-    width: calc(
-        100% - 20px
-    ); /* Ocupa todo el ancho del container con un poco de margen */
-    margin: 10px; /* Agrega un poco de margen alrededor del input */
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde delgado */
-    border-radius: 5px; /* Bordes redondeados */
-    outline: none; /* Quita el borde de enfoque predeterminado */
-    box-sizing: border-box; /* Incluye el padding y el border en el tamaño total */
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
 }
 
 .clientInfoDiv {
-    border-bottom: 1px solid #ccc; /* Borde inferior gris */
-    padding-bottom: 20px; /* Agrega espacio después de la línea divisoria */
-    margin-bottom: 20px; /* Agrega espacio entre el div de información del cliente y el siguiente */
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
+/* BUTTONS */
 button {
-    border: none; /* Sin bordes */
-    padding: 5px 10px; /* Espaciado interno para los botones de detalle */
-    border-radius: 10px; /* Bordes redondeados para los botones de detalle */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -127,9 +132,8 @@ button {
 }
 
 .detailButton {
-    background-color: #3b82f6; /* Color de fondo azul para los botones de detalle */
-    color: #ffffff; /* Color de texto blanco para los botones de detalle */
-    /* Cambia el cursor al pasar por encima del botón de detalle */
+    background-color: #3b82f6;
+    color: #ffffff;
 }
 
 .detailbutton:hover {
