@@ -1,0 +1,95 @@
+body {
+    background-color: #f0f0f0; /* Fondo de la página gris claro */
+}
+
+.container {
+    background-color: #ffffff; /* Fondo de los contenedores blanco */
+    border-radius: 10px; /* Bordes redondeados para los contenedores */
+    padding: 20px; /* Espaciado interno para los contenedores */
+    margin-bottom: 20px; /* Margen inferior para separar los contenedores */
+    margin-left: auto; /* Centrar en pantalla */
+    margin-right: auto; /* Centrar en pantalla */
+    max-width: 800px; /* Ancho máximo del contenedor */
+    margin-top: 20px;
+}
+
+.listItem {
+    display: flex; /* Utiliza flexbox */
+    justify-content: space-between; /* Distribuye los elementos justificadamente */
+    align-items: center; /* Centra los elementos verticalmente */
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-height: 20px;
+}
+
+.listItemWithButton {
+    display: flex; /* Utiliza flexbox */
+    justify-content: space-between; /* Distribuye los elementos justificadamente */
+    align-items: center; /* Centra los elementos verticalmente */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-height: 20px;
+}
+
+.detailButton {
+    background-color: blue; /* Color de fondo azul para los botones de detalle */
+    color: #ffffff; /* Color de texto blanco para los botones de detalle */
+    border: none; /* Sin borde para los botones de detalle */
+    padding: 5px 10px; /* Espaciado interno para los botones de detalle */
+    border-radius: 5px; /* Bordes redondeados para los botones de detalle */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón de detalle */
+}
+
+/* Estilos para otros botones */
+.button {
+    background-color: #808080; /* Color de fondo gris para los botones */
+    color: #ffffff; /* Color de texto blanco para los botones */
+    border: none; /* Sin borde para los botones */
+    padding: 5px 10px; /* Espaciado interno para los botones */
+    border-radius: 5px; /* Bordes redondeados para los botones */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+}
+
+/* Estilos para los formularios */
+form {
+    margin-bottom: 20px; /* Margen inferior para separar los formularios */
+}
+
+input[type='text'],
+input[type='date'] {
+    width: 100%; /* Ancho completo para los inputs de texto y fecha */
+    padding: 8px; /* Espaciado interno para los inputs */
+    margin-bottom: 10px; /* Margen inferior para separar los inputs */
+    border-radius: 5px; /* Bordes redondeados para los inputs */
+}
+
+select {
+    width: 100%; /* Ancho completo para los select */
+    padding: 8px; /* Espaciado interno para los select */
+    margin-bottom: 10px; /* Margen inferior para separar los select */
+    border-radius: 5px; /* Bordes redondeados para los select */
+}
+
+.mainH1 {
+    font-size: 1.5rem; /* Equivalente a 'text-2xl' */
+    font-weight: bold; /* Equivalente a 'font-bold' */
+}
+
+.mainH2 {
+    font-size: 1.25rem; /* Equivalente a 'text-xl' */
+    font-weight: bold; /* Equivalente a 'font-bold' */
+}
+
+.listH1 {
+    font-size: 1.125rem; /* Equivalente a 'text-lg' */
+    font-weight: medium; /* Equivalente a 'font-medium' */
+}
+
+.listSpan {
+    font-size: 1.25rem; /* Equivalente a 'text-xl' */
+    font-weight: medium;
+}

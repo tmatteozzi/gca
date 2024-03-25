@@ -23,13 +23,14 @@ export function createHeadingTitle(
 export function createListItem(title, content, parentDiv) {
     const div = document.createElement('div');
     const h1 = document.createElement('h1');
-    const h2 = document.createElement('h2');
+    const span = document.createElement('span');
+    div.classList.add('listItem');
     h1.textContent = title;
     h1.classList.add('listH1');
-    h2.textContent = content;
-    h2.classList.add('listH2');
+    span.textContent = content;
+    span.classList.add('listSpan');
     div.appendChild(h1);
-    div.appendChild(h2);
+    div.appendChild(span);
     parentDiv.appendChild(div);
 }
 
@@ -55,6 +56,7 @@ export function createPageContainer() {
     if (appDiv) cleanElement(appDiv);
 
     const containerDiv = document.createElement('div');
+    containerDiv.classList.add('container');
     if (appDiv) appDiv.appendChild(containerDiv);
 
     return containerDiv;
@@ -80,15 +82,20 @@ export function createDropdown(labelText, form, name, options, selectedOption) {
 
 export function renderInsureds(insureds, containerDiv, searchInput) {
     cleanElement(containerDiv);
+    const h2 = document.createElement('h2');
+    h2.classList.add('mainH2');
+    h2.textContent = 'Resultados: ';
+    containerDiv.appendChild(h2);
     // RENDER INSUREDS AFTER SEARCH
     if (searchInput.value.trim() !== '') {
         insureds.forEach((insured) => {
             // INSURED CONTAINER
             const clientDiv = document.createElement('div');
-            clientDiv.classList.add('insuredItem');
+            clientDiv.classList.add('listItemWithButton');
 
             // INSURED NAME
-            const nameHeader = document.createElement('h2');
+            const nameHeader = document.createElement('h1');
+            nameHeader.classList.add('listH1');
             nameHeader.textContent = `${insured.name} ${insured.lastName}`;
 
             // DETAILS BUTTON FOR EACH INSURED
@@ -111,10 +118,11 @@ export function renderPolicies(policies, insuredId, containerDiv) {
     policies.forEach((policy) => {
         // POLICY CONTAINER
         const policyDiv = document.createElement('div');
-        policyDiv.classList.add('policyItem');
+        policyDiv.classList.add('listItemWithButton');
 
         // POLICY NAME
-        const nameHeader = document.createElement('h2');
+        const nameHeader = document.createElement('h1');
+        nameHeader.classList.add('listH1');
         nameHeader.textContent = `${policy.productName}`;
 
         // DETAILS BUTTON FOR EACH POLICY
