@@ -17,12 +17,16 @@ export function createHeadingTitle(
     parentDiv.appendChild(div);
 }
 
-export function createListItem(h1Content, parentDiv) {
+export function createListItem(title, content, parentDiv) {
     const div = document.createElement('div');
     const h1 = document.createElement('h1');
-    h1.textContent = h1Content;
+    const h2 = document.createElement('h2');
+    h1.textContent = title;
     h1.classList.add('listH1');
+    h2.textContent = content;
+    h2.classList.add('listH2');
     div.appendChild(h1);
+    div.appendChild(h2);
     parentDiv.appendChild(div);
 }
 

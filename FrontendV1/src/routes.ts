@@ -124,13 +124,14 @@ async function showInsuredDetails(id) {
             containerDiv
         );
         // CLIENT DATA
-        createListItem(`${insured.address}`, containerDiv);
+        createListItem('Address:', `${insured.address}`, containerDiv);
         createListItem(
+            'Birthday:',
             `${insured.birthDay.toLocaleDateString()}`,
             containerDiv
         );
-        createListItem(`${insured.phone}`, containerDiv);
-        createListItem(`${insured.country}`, containerDiv);
+        createListItem('Phone:', `${insured.phone}`, containerDiv);
+        createListItem('Country', `${insured.country}`, containerDiv);
 
         // EDIT BUTTON
         const editButton = document.createElement('button');
@@ -249,18 +250,20 @@ async function showPolicyDetails(insuredId, policyId) {
     containerDiv.appendChild(policyDataDiv);
     // POLICY DATA
     createListItem(
-        `Start Date: ${policy.startDate.toLocaleDateString()}`,
+        'Start Date:',
+        `${policy.startDate.toLocaleDateString()}`,
         policyDataDiv
     );
     createListItem(
-        `End Date: ${policy.endDate.toLocaleDateString()}`,
+        'End Date:',
+        `${policy.endDate.toLocaleDateString()}`,
         policyDataDiv
     );
-    createListItem(`Product Name: ${policy.productName}`, policyDataDiv);
-    createListItem(`Branch Name: ${policy.branchName}`, policyDataDiv);
-    createListItem(`Company Name: ${policy.companyName}`, policyDataDiv);
+    createListItem('Product Name: ', `${policy.productName}`, policyDataDiv);
+    createListItem('Branch Name: ', `${policy.branchName}`, policyDataDiv);
+    createListItem('Policy Name: ', `${policy.companyName}`, policyDataDiv);
 
-    // EDIT BUTTOn
+    // EDIT BUTTON
     const editButton = document.createElement('button');
     editButton.textContent = 'Editar';
     editButton.classList.add('editButton');
