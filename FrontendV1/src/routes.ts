@@ -15,6 +15,7 @@ import {
     editInsured
 } from './Insureds';
 import { getAllPoliciesByUser, getPolicyById, editPolicy } from './Policies';
+import { userName } from './Login';
 
 export async function showHomePage() {
     try {
@@ -23,7 +24,7 @@ export async function showHomePage() {
 
         const containerDiv = createPageContainer();
         // HEADING
-        createHeadingTitle('Asegurados de {nombreUsuario}', containerDiv);
+        createHeadingTitle(`Asegurados de ${userName}`, containerDiv);
 
         // ADD INSURED BUTTON
         const addInsuredButton = document.createElement('button');

@@ -1,9 +1,7 @@
-import { login } from './Login';
+import { login, isLoggedIn } from './Login';
 import { showHomePage } from './routes';
 
-const userAuthenticated = true;
-
-if (userAuthenticated) {
+if (isLoggedIn) {
     showHomePage();
 } else {
     login();
