@@ -9,13 +9,14 @@ export async function getPolicyById(id): Promise<Policy> {
 }
 
 // CREAR NUEVO CLIENTE
-export async function addPolicy(insured: Policy) {
+export async function addPolicy(policy: Policy) {
     // METODO POST PARA AGREGAR
 }
 
 // EDITAR CLIENTE
-export async function editPolicy(insured: Policy) {
+export async function editPolicy(policy: Policy) {
     // METODO PARA EDITAR
+    console.log(policy);
 }
 
 // ELIMINAR CLIENTE

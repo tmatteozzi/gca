@@ -15,7 +15,11 @@ import {
     addInsured,
     editInsured
 } from './InsuredsService';
-import { getAllPoliciesByUser, getPolicyById, editPolicy } from './PoliciesService';
+import {
+    getAllPoliciesByUser,
+    getPolicyById,
+    editPolicy
+} from './PoliciesService';
 import { userName } from './Login';
 
 export async function showHomePage() {
@@ -34,7 +38,7 @@ export async function showHomePage() {
         // ADD INSURED BUTTON
         const addInsuredButton = document.createElement('button');
         addInsuredButton.textContent = 'Agregar Asegurado';
-        addInsuredButton.classList.add('addButton');
+        addInsuredButton.classList.add('actionButton');
         addInsuredButton.addEventListener('click', () => {
             navigateToAddInsuredPage();
         });
@@ -63,17 +67,12 @@ export async function showHomePage() {
     }
 }
 
-async function showAddInsured() {
+async function showAddInsuredForm() {
     const containerDiv = createPageContainer();
 
     // HEADING
     const headerContainer = createHeaderContainer(containerDiv);
     createHeadingTitle('Agregar nuevo asegurado', headerContainer);
-
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Crear';
-    headerContainer.appendChild(submitButton);
 
     // FORM
     const addInsuredForm = document.createElement('form');
@@ -86,9 +85,15 @@ async function showAddInsured() {
     createFormItem('Teléfono', addInsuredForm, 'text', 'phone');
     createFormItem('País', addInsuredForm, 'text', 'country');
 
+    // CREATE BUTTON
+    const createButton = document.createElement('button');
+    createButton.classList.add('actionButton');
+    createButton.type = 'submit';
+    createButton.textContent = 'Crear';
+
     // EVENT HANDLER
-    addInsuredForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // PREVENT RELOAD
+    createButton.addEventListener('click', async (event) => {
+        event.preventDefault();
 
         // GET FORM DATA AND TURN IT INTO INSURED TYPE
         const formData = new FormData(addInsuredForm);
@@ -99,7 +104,7 @@ async function showAddInsured() {
             address: formData.get('address') as string,
             phone: formData.get('phone') as string,
             country: formData.get('country') as string,
-            userId: 0 // ACA TIENE QUE VENIR EL VALOR DEL ID QUE VOY A TENER AL INICIAR SESION
+            userId: 0
         };
 
         try {
@@ -115,7 +120,7 @@ async function showAddInsured() {
             );
         }
     });
-    // ADD FORM TO MAIN DIV
+    headerContainer.appendChild(createButton);
     containerDiv.appendChild(addInsuredForm);
 }
 
@@ -169,17 +174,17 @@ async function showInsuredDetails(id) {
     }
 }
 
-function showEditInsuredForm(insured) {
+async function showEditInsuredForm(insured) {
     const containerDiv = createPageContainer();
 
     // HEADING
     const headerContainer = createHeaderContainer(containerDiv);
     createHeadingTitle('Editar Asegurado', headerContainer);
 
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Guardar';
-    headerContainer.appendChild(submitButton);
+    // CREATE BUTTON
+    const editButton = document.createElement('button');
+    editButton.classList.add('actionButton');
+    editButton.textContent = 'Guardar';
 
     // FORM
     const editInsuredForm = document.createElement('form');
@@ -211,12 +216,12 @@ function showEditInsuredForm(insured) {
     createFormItem('País', editInsuredForm, 'text', 'country', insured.country);
 
     // EVENT HANDLER
-    editInsuredForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // PREVENT RELOAD
+    editButton.addEventListener('click', async (event) => {
+        event.preventDefault();
 
         // GET FORM DATA AND TURN IT INTO INSURED TYPE
         const formData = new FormData(editInsuredForm);
-        const editedInsured: Insured = {
+        const editedInsured = {
             name: formData.get('name') as string,
             lastName: formData.get('lastName') as string,
             birthDay: new Date(formData.get('birthDay') as string),
@@ -239,7 +244,7 @@ function showEditInsuredForm(insured) {
             );
         }
     });
-    // ADD FORM TO MAIN DIV
+    headerContainer.appendChild(editButton);
     containerDiv.appendChild(editInsuredForm);
 }
 
@@ -290,10 +295,10 @@ async function showEditPolicyForm(insuredId, policy) {
         const headerContainer = createHeaderContainer(containerDiv);
         createHeadingTitle('Editar Póliza', headerContainer);
 
-        const submitButton = document.createElement('button');
-        submitButton.type = 'submit';
-        submitButton.textContent = 'Guardar';
-        headerContainer.appendChild(submitButton);
+        // CREATE BUTTON
+        const editButton = document.createElement('button');
+        editButton.classList.add('actionButton');
+        editButton.textContent = 'Guardar';
 
         // FORM
         const editPolicyForm = document.createElement('form');
@@ -345,8 +350,8 @@ async function showEditPolicyForm(insuredId, policy) {
         );
 
         // EVENT HANDLER
-        editPolicyForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // PREVENT RELOAD
+        editButton.addEventListener('click', async (event) => {
+            event.preventDefault();
 
             // GET FORM DATA AND TURN IT INTO POLICY TYPE
             const formData = new FormData(editPolicyForm);
@@ -371,6 +376,7 @@ async function showEditPolicyForm(insuredId, policy) {
                 );
             }
         });
+        headerContainer.appendChild(editButton);
 
         // ADD FORM TO MAIN DIV
         containerDiv.appendChild(editPolicyForm);
@@ -398,7 +404,7 @@ export function navigateToInsuredDetailPage(id) {
 function navigateToAddInsuredPage() {
     const addInsuredPageUrl = '/client/add';
     history.pushState({ page: 'addInsured' }, '', addInsuredPageUrl);
-    showAddInsured();
+    showAddInsuredForm();
 }
 
 function navigateToEditInsuredPage(id) {
@@ -449,7 +455,7 @@ window.onpopstate = function (event) {
         } else if (state.page === 'policyDetail') {
             showPolicyDetails(state.insuredId, state.policyId);
         } else if (state.page === 'addInsured') {
-            showAddInsured();
+            showAddInsuredForm();
         } else if (state.page === 'editInsured') {
             showEditInsuredForm(state.insuredId);
         } else if (state.page === 'editPolicy') {
