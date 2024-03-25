@@ -5,7 +5,8 @@ import {
     createListItem,
     createDropdown,
     createPageContainer,
-    renderInsureds
+    renderInsureds,
+    renderPolicies
 } from './utils';
 import {
     getAllInsureds,
@@ -143,20 +144,7 @@ async function showInsuredDetails(id) {
 
         // INSURED POLICIES
         createHeadingTitle('Polizas', containerDiv);
-        policies.forEach((policy) => {
-            const policyDiv = document.createElement('div');
-            const nameText = document.createTextNode(`${policy.productName}`);
-            const detailButton = document.createElement('button');
-            detailButton.textContent = 'Detalle';
-            // EVENT HANDLER
-            detailButton.addEventListener('click', () => {
-                navigateToPolicyDetailPage(insured.id, policy.id);
-            });
-            // APPENDS
-            policyDiv.appendChild(nameText);
-            policyDiv.appendChild(detailButton);
-            containerDiv.appendChild(policyDiv);
-        });
+        renderPolicies(policies, insured.id, containerDiv);
     } catch (error) {
         console.error('Error al cargar los detalles del cliente:', error);
     }
@@ -421,7 +409,7 @@ function navigateToEditPolicyPage(insuredId, policyId) {
         );
 }
 
-function navigateToPolicyDetailPage(insuredId, policyId) {
+export function navigateToPolicyDetailPage(insuredId, policyId) {
     const detailPageUrl = `/client/${insuredId}/policy/${policyId}`;
 
     // NAVIGATE TO POLICY DETAIL PAGE

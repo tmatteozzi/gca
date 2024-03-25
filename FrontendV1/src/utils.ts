@@ -1,4 +1,7 @@
-import { navigateToInsuredDetailPage } from './routes';
+import {
+    navigateToInsuredDetailPage,
+    navigateToPolicyDetailPage
+} from './routes';
 
 export function cleanElement(element) {
     element.innerHTML = '';
@@ -57,36 +60,6 @@ export function createPageContainer() {
     return containerDiv;
 }
 
-export function renderInsureds(insureds, containerDiv, searchInput) {
-    cleanElement(containerDiv);
-    // RENDER INSUREDS AFTER SEARCH
-    if (searchInput.value.trim() !== '') {
-        insureds.forEach((insured) => {
-            // INSURED CONTAINER
-            const clientDiv = document.createElement('div');
-            clientDiv.classList.add('insuredItem'); // Aplicar clase de estilo
-
-            // INSURED NAME
-            const nameText = document.createTextNode(
-                `${insured.name} ${insured.lastName}`
-            );
-
-            // DETAILS BUTTON FOR EACH INSURED
-            const detailButton = document.createElement('button');
-            detailButton.textContent = 'Detalles';
-
-            // EVENT HANDLER
-            detailButton.addEventListener('click', () => {
-                navigateToInsuredDetailPage(insured.id);
-            });
-
-            clientDiv.appendChild(nameText);
-            clientDiv.appendChild(detailButton);
-            containerDiv.appendChild(clientDiv);
-        });
-    }
-}
-
 export function createDropdown(labelText, form, name, options, selectedOption) {
     const label = document.createElement('label');
     label.textContent = labelText;
@@ -103,4 +76,59 @@ export function createDropdown(labelText, form, name, options, selectedOption) {
         dropdown.appendChild(optionElement);
     });
     form.appendChild(dropdown);
+}
+
+export function renderInsureds(insureds, containerDiv, searchInput) {
+    cleanElement(containerDiv);
+    // RENDER INSUREDS AFTER SEARCH
+    if (searchInput.value.trim() !== '') {
+        insureds.forEach((insured) => {
+            // INSURED CONTAINER
+            const clientDiv = document.createElement('div');
+            clientDiv.classList.add('insuredItem');
+
+            // INSURED NAME
+            const nameHeader = document.createElement('h2');
+            nameHeader.textContent = `${insured.name} ${insured.lastName}`;
+
+            // DETAILS BUTTON FOR EACH INSURED
+            const detailButton = document.createElement('button');
+            detailButton.textContent = 'Detalles';
+
+            // EVENT HANDLER
+            detailButton.addEventListener('click', () => {
+                navigateToInsuredDetailPage(insured.id);
+            });
+
+            clientDiv.appendChild(nameHeader);
+            clientDiv.appendChild(detailButton);
+            containerDiv.appendChild(clientDiv);
+        });
+    }
+}
+
+export function renderPolicies(policies, insuredId, containerDiv) {
+    policies.forEach((policy) => {
+        // POLICY CONTAINER
+        const policyDiv = document.createElement('div');
+        policyDiv.classList.add('policyItem');
+
+        // POLICY NAME
+        const nameHeader = document.createElement('h2');
+        nameHeader.textContent = `${policy.productName}`;
+
+        // DETAILS BUTTON FOR EACH POLICY
+        const detailButton = document.createElement('button');
+        detailButton.textContent = 'Detalle';
+
+        // EVENT HANDLER
+        detailButton.addEventListener('click', () => {
+            navigateToPolicyDetailPage(insuredId, policy.id);
+        });
+
+        // APPENDS
+        policyDiv.appendChild(nameHeader);
+        policyDiv.appendChild(detailButton);
+        containerDiv.appendChild(policyDiv);
+    });
 }
