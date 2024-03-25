@@ -116,21 +116,12 @@ button {
     cursor: pointer;
 }
 
-.addButton {
+.actionButton {
     background-color: #6b7280;
     color: #ffffff;
 }
 
-.addButton:hover {
-    background-color: #4b5563;
-}
-
-.editButton {
-    background-color: #6b7280;
-    color: #ffffff;
-}
-
-.editButton:hover {
+.actionButton:hover {
     background-color: #4b5563;
 }
 
