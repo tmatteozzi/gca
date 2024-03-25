@@ -23,19 +23,27 @@ export async function showHomePage() {
         const insureds = await getAllInsureds();
 
         const containerDiv = createPageContainer();
+
+        // NUEVO DIV PARA ASEGURADOS Y BOTÓN
+        const headerContainer = document.createElement('div');
+        headerContainer.classList.add('headerContainer');
+        containerDiv.appendChild(headerContainer);
+
         // HEADING
-        createHeadingTitle(`Asegurados de ${userName}`, containerDiv);
+        createHeadingTitle(`Asegurados de ${userName}`, headerContainer);
 
         // ADD INSURED BUTTON
         const addInsuredButton = document.createElement('button');
         addInsuredButton.textContent = 'Agregar Asegurado';
+        addInsuredButton.classList.add('addButton');
         addInsuredButton.addEventListener('click', () => {
             navigateToAddInsuredPage();
         });
-        containerDiv.appendChild(addInsuredButton);
+        headerContainer.appendChild(addInsuredButton);
 
         // INSURED SEARCH INPUT
         const searchInput = document.createElement('input');
+        searchInput.classList.add('insuredsSearchInput');
         containerDiv.appendChild(searchInput);
         searchInput.placeholder = 'Buscar...';
         searchInput.addEventListener('input', () => {
@@ -120,32 +128,43 @@ async function showInsuredDetails(id) {
         const policies = await getAllPoliciesByUser(insured.id);
 
         const containerDiv = createPageContainer();
+
+        // CLIENT INFO DIV
+        const clientInfoDiv = document.createElement('div');
+        clientInfoDiv.classList.add('clientInfoDiv');
+        containerDiv.appendChild(clientInfoDiv);
+
         // INSURED DETAILS
         createHeadingTitle(
             `${insured.name + ' ' + insured.lastName}`,
-            containerDiv
+            clientInfoDiv
         );
         // CLIENT DATA
-        createListItem('Address:', `${insured.address}`, containerDiv);
+        createListItem('Address:', `${insured.address}`, clientInfoDiv);
         createListItem(
             'Birthday:',
             `${insured.birthDay.toLocaleDateString()}`,
-            containerDiv
+            clientInfoDiv
         );
-        createListItem('Phone:', `${insured.phone}`, containerDiv);
-        createListItem('Country', `${insured.country}`, containerDiv);
+        createListItem('Phone:', `${insured.phone}`, clientInfoDiv);
+        createListItem('Country', `${insured.country}`, clientInfoDiv);
 
         // EDIT BUTTON
         const editButton = document.createElement('button');
+        editButton.classList.add('editButton');
         editButton.textContent = 'Editar';
         editButton.addEventListener('click', () => {
             navigateToEditInsuredPage(insured.id);
         });
-        containerDiv.appendChild(editButton);
+        clientInfoDiv.appendChild(editButton);
+
+        // INSURED POLICIES DIV
+        const insuredPoliciesDiv = document.createElement('div');
+        containerDiv.appendChild(insuredPoliciesDiv);
 
         // INSURED POLICIES
-        createHeadingTitle('Polizas', containerDiv);
-        renderPolicies(policies, insured.id, containerDiv);
+        createHeadingTitle('Polizas', insuredPoliciesDiv);
+        renderPolicies(policies, insured.id, insuredPoliciesDiv);
     } catch (error) {
         console.error('Error al cargar los detalles del cliente:', error);
     }

@@ -31,27 +31,10 @@ body {
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 10px;
     max-height: 20px;
-}
-
-.detailButton {
-    background-color: blue; /* Color de fondo azul para los botones de detalle */
-    color: #ffffff; /* Color de texto blanco para los botones de detalle */
-    border: none; /* Sin borde para los botones de detalle */
-    padding: 5px 10px; /* Espaciado interno para los botones de detalle */
-    border-radius: 5px; /* Bordes redondeados para los botones de detalle */
-    cursor: pointer; /* Cambia el cursor al pasar por encima del botón de detalle */
-}
-
-/* Estilos para otros botones */
-.button {
-    background-color: #808080; /* Color de fondo gris para los botones */
-    color: #ffffff; /* Color de texto blanco para los botones */
-    border: none; /* Sin borde para los botones */
-    padding: 5px 10px; /* Espaciado interno para los botones */
-    border-radius: 5px; /* Bordes redondeados para los botones */
-    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
 }
 
 /* Estilos para los formularios */
@@ -81,7 +64,7 @@ select {
 
 .mainH2 {
     font-size: 1.25rem; /* Equivalente a 'text-xl' */
-    font-weight: bold; /* Equivalente a 'font-bold' */
+    font-weight: 600; /* Equivalente a 'font-bold' */
 }
 
 .listH1 {
@@ -92,4 +75,63 @@ select {
 .listSpan {
     font-size: 1.25rem; /* Equivalente a 'text-xl' */
     font-weight: medium;
+}
+
+.headerContainer {
+    display: flex; /* Utiliza flexbox */
+    justify-content: space-between; /* Distribuye los elementos justificadamente */
+    align-items: center; /* Centra los elementos verticalmente */
+}
+
+.insuredsSearchInput {
+    width: calc(
+        100% - 20px
+    ); /* Ocupa todo el ancho del container con un poco de margen */
+    margin: 10px; /* Agrega un poco de margen alrededor del input */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde delgado */
+    border-radius: 5px; /* Bordes redondeados */
+    outline: none; /* Quita el borde de enfoque predeterminado */
+    box-sizing: border-box; /* Incluye el padding y el border en el tamaño total */
+}
+
+.clientInfoDiv {
+    border-bottom: 1px solid #ccc; /* Borde inferior gris */
+    padding-bottom: 20px; /* Agrega espacio después de la línea divisoria */
+    margin-bottom: 20px; /* Agrega espacio entre el div de información del cliente y el siguiente */
+}
+
+button {
+    border: none; /* Sin bordes */
+    padding: 5px 10px; /* Espaciado interno para los botones de detalle */
+    border-radius: 10px; /* Bordes redondeados para los botones de detalle */
+    cursor: pointer;
+}
+
+.addButton {
+    background-color: #6b7280;
+    color: #ffffff;
+}
+
+.addButton:hover {
+    background-color: #4b5563;
+}
+
+.editButton {
+    background-color: #6b7280;
+    color: #ffffff;
+}
+
+.editButton:hover {
+    background-color: #4b5563;
+}
+
+.detailButton {
+    background-color: #3b82f6; /* Color de fondo azul para los botones de detalle */
+    color: #ffffff; /* Color de texto blanco para los botones de detalle */
+    /* Cambia el cursor al pasar por encima del botón de detalle */
+}
+
+.detailbutton:hover {
+    background-color: #2563eb;
 }

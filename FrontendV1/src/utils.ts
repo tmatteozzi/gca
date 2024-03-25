@@ -100,6 +100,7 @@ export function renderInsureds(insureds, containerDiv, searchInput) {
 
             // DETAILS BUTTON FOR EACH INSURED
             const detailButton = document.createElement('button');
+            detailButton.classList.add('detailButton');
             detailButton.textContent = 'Detalles';
 
             // EVENT HANDLER
@@ -123,10 +124,11 @@ export function renderPolicies(policies, insuredId, containerDiv) {
         // POLICY NAME
         const nameHeader = document.createElement('h1');
         nameHeader.classList.add('listH1');
-        nameHeader.textContent = `${policy.productName}`;
+        nameHeader.textContent = `${policy.branchName} | ${policy.productName}`;
 
         // DETAILS BUTTON FOR EACH POLICY
         const detailButton = document.createElement('button');
+        detailButton.classList.add('detailButton');
         detailButton.textContent = 'Detalle';
 
         // EVENT HANDLER
