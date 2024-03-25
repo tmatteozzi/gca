@@ -22,6 +22,7 @@ import {
 } from './PoliciesService';
 import { userName } from './Login';
 
+// PAGES
 export async function showHomePage() {
     try {
         // REQUEST
@@ -67,6 +68,96 @@ export async function showHomePage() {
     }
 }
 
+async function showInsuredDetails(id) {
+    try {
+        // REQUESTS
+        const insured = await getInsured(id);
+        const policies = await getAllPoliciesByUser(insured.id);
+
+        const containerDiv = createPageContainer();
+
+        // CLIENT INFO DIV
+        const clientInfoDiv = document.createElement('div');
+        clientInfoDiv.classList.add('clientInfoDiv');
+        containerDiv.appendChild(clientInfoDiv);
+
+        // HEADER
+        const headerContainer = createHeaderContainer(clientInfoDiv);
+        createHeadingTitle(
+            `${insured.name + ' ' + insured.lastName}`,
+            headerContainer
+        );
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('actionButton');
+        editButton.textContent = 'Editar';
+        editButton.addEventListener('click', () => {
+            navigateToEditInsuredPage(insured.id);
+        });
+        headerContainer.appendChild(editButton);
+
+        // CLIENT DATA
+        createListItem('Address:', `${insured.address}`, clientInfoDiv);
+        createListItem(
+            'Birthday:',
+            `${insured.birthDay.toLocaleDateString()}`,
+            clientInfoDiv
+        );
+        createListItem('Phone:', `${insured.phone}`, clientInfoDiv);
+        createListItem('Country', `${insured.country}`, clientInfoDiv);
+
+        // INSURED POLICIES DIV
+        const insuredPoliciesDiv = document.createElement('div');
+        containerDiv.appendChild(insuredPoliciesDiv);
+
+        // INSURED POLICIES
+        createHeadingTitle('Polizas', insuredPoliciesDiv);
+        renderPolicies(policies, insured.id, insuredPoliciesDiv);
+    } catch (error) {
+        console.error('Error al cargar los detalles del cliente:', error);
+    }
+}
+
+async function showPolicyDetails(insuredId, policyId) {
+    // REQUEST
+    const policy = await getPolicyById(policyId);
+
+    const containerDiv = createPageContainer();
+
+    const headerContainer = document.createElement('div');
+    headerContainer.classList.add('headerContainer');
+    // MAIN HEADING
+    createHeadingTitle('Poliza', headerContainer);
+    // EDIT BUTTON
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('actionButton');
+    editButton.addEventListener('click', () => {
+        navigateToEditPolicyPage(insuredId, policy.id);
+    });
+    headerContainer.appendChild(editButton);
+
+    containerDiv.appendChild(headerContainer);
+    // INSUREDS DIV
+    const policyDataDiv = document.createElement('div');
+    containerDiv.appendChild(policyDataDiv);
+    // POLICY DATA
+    createListItem(
+        'Start Date:',
+        `${policy.startDate.toLocaleDateString()}`,
+        policyDataDiv
+    );
+    createListItem(
+        'End Date:',
+        `${policy.endDate.toLocaleDateString()}`,
+        policyDataDiv
+    );
+    createListItem('Product Name: ', `${policy.productName}`, policyDataDiv);
+    createListItem('Branch Name: ', `${policy.branchName}`, policyDataDiv);
+    createListItem('Policy Name: ', `${policy.companyName}`, policyDataDiv);
+}
+
+// FORMS
 async function showAddInsuredForm() {
     const containerDiv = createPageContainer();
 
@@ -122,56 +213,6 @@ async function showAddInsuredForm() {
     });
     headerContainer.appendChild(createButton);
     containerDiv.appendChild(addInsuredForm);
-}
-
-async function showInsuredDetails(id) {
-    try {
-        // REQUESTS
-        const insured = await getInsured(id);
-        const policies = await getAllPoliciesByUser(insured.id);
-
-        const containerDiv = createPageContainer();
-
-        // CLIENT INFO DIV
-        const clientInfoDiv = document.createElement('div');
-        clientInfoDiv.classList.add('clientInfoDiv');
-        containerDiv.appendChild(clientInfoDiv);
-
-        // HEADER
-        const headerContainer = createHeaderContainer(clientInfoDiv);
-        createHeadingTitle(
-            `${insured.name + ' ' + insured.lastName}`,
-            headerContainer
-        );
-
-        const editButton = document.createElement('button');
-        editButton.classList.add('editButton');
-        editButton.textContent = 'Editar';
-        editButton.addEventListener('click', () => {
-            navigateToEditInsuredPage(insured.id);
-        });
-        headerContainer.appendChild(editButton);
-
-        // CLIENT DATA
-        createListItem('Address:', `${insured.address}`, clientInfoDiv);
-        createListItem(
-            'Birthday:',
-            `${insured.birthDay.toLocaleDateString()}`,
-            clientInfoDiv
-        );
-        createListItem('Phone:', `${insured.phone}`, clientInfoDiv);
-        createListItem('Country', `${insured.country}`, clientInfoDiv);
-
-        // INSURED POLICIES DIV
-        const insuredPoliciesDiv = document.createElement('div');
-        containerDiv.appendChild(insuredPoliciesDiv);
-
-        // INSURED POLICIES
-        createHeadingTitle('Polizas', insuredPoliciesDiv);
-        renderPolicies(policies, insured.id, insuredPoliciesDiv);
-    } catch (error) {
-        console.error('Error al cargar los detalles del cliente:', error);
-    }
 }
 
 async function showEditInsuredForm(insured) {
@@ -246,45 +287,6 @@ async function showEditInsuredForm(insured) {
     });
     headerContainer.appendChild(editButton);
     containerDiv.appendChild(editInsuredForm);
-}
-
-async function showPolicyDetails(insuredId, policyId) {
-    // REQUEST
-    const policy = await getPolicyById(policyId);
-
-    const containerDiv = createPageContainer();
-
-    const headerContainer = document.createElement('div');
-    headerContainer.classList.add('headerContainer');
-    // MAIN HEADING
-    createHeadingTitle('Poliza', headerContainer);
-    // EDIT BUTTON
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.classList.add('editButton');
-    editButton.addEventListener('click', () => {
-        navigateToEditPolicyPage(insuredId, policy.id);
-    });
-    headerContainer.appendChild(editButton);
-
-    containerDiv.appendChild(headerContainer);
-    // INSUREDS DIV
-    const policyDataDiv = document.createElement('div');
-    containerDiv.appendChild(policyDataDiv);
-    // POLICY DATA
-    createListItem(
-        'Start Date:',
-        `${policy.startDate.toLocaleDateString()}`,
-        policyDataDiv
-    );
-    createListItem(
-        'End Date:',
-        `${policy.endDate.toLocaleDateString()}`,
-        policyDataDiv
-    );
-    createListItem('Product Name: ', `${policy.productName}`, policyDataDiv);
-    createListItem('Branch Name: ', `${policy.branchName}`, policyDataDiv);
-    createListItem('Policy Name: ', `${policy.companyName}`, policyDataDiv);
 }
 
 async function showEditPolicyForm(insuredId, policy) {
