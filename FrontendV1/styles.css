@@ -104,6 +104,11 @@ select {
     font-weight: medium;
 }
 
+label {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
 .insuredsSearchInput {
     width: calc(100% - 20px);
     margin: 10px;
